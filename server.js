@@ -14,7 +14,7 @@ const allowCors = (req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, PUT, POST, DELETE, OPTIONS, PATCH"
   );
-  reduce.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Credentials", "true");
   next();
 };
 

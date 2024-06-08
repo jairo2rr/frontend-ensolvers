@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NotesApp</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+  <div class="container h-100 w-100">
+    <nav class="title bg-black text-white px-2 pt-3" style="border-radius: 0 0 10px 10px;">
+      <div class="row">
+        <h2>Notes App</h2>
+      </div>
+    </nav>
+    <div class="body">
+      <section class="filter">
+        <div class="row py-2">
+          <div class="col-auto" *ngIf="isShowingUnarchivedNotes">
+            <button class="btn btn-outline-secondary" (click)="showArchivedNotes()"><i class='bx bx-sm bx-archive'></i> Archived</button>
+          </div>
+          <div class="col-auto" *ngIf="!isShowingUnarchivedNotes">
+            <button class="btn btn-outline-info" (click)="showUnarchivedNotes()">
+              <i class='bx bx-sm bx-left-arrow-alt'></i> Back
+            </button>
+          </div>
+        </div>
+      </section>
+      <section *ngIf="!isShowingUnarchivedNotes">
+        <div class="col-12">
+          <h4 class="ps-2 mt-3" style="color:gray;">Archived Notes</h4>
+        </div>
+      </section>
+      <section class="notes">
+        <div class="row justify-content-end" *ngIf="isShowingUnarchivedNotes">
+          <div class="col-auto">
+            <button class="btn btn-success" (click)="createNote()"><i class='bx bx-sm bx-plus'></i>Agregar nota</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12" *ngIf="isShowingUnarchivedNotes">
+            <div class="d-flex"  *ngFor="let unarchivedNote of unarchivedNotes">
+              <div class="card w-100 my-1">
+                <div class="card-body">
+                  <h5 class="card-title">{{unarchivedNote.title}}</h5>
+                  <div class="card-text">
+                    <div class="row justify-content-between">
+                      <div class="col-auto">{{unarchivedNote.content}}</div>
+                      <div class="col-auto">
+                        <i class='bx bx-sm bx-archive-in' (click)="archiveNote(unarchivedNote.id)" style="color:gray;"></i>
+                        <i class='bx bx-sm bx-edit' (click)="editNote(unarchivedNote)"></i>
+                        <i class='bx bx-sm bx-trash' (click)="deleteNote(unarchivedNote.id)" style="color:red;"></i>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-auto" *ngFor="let category of unarchivedNote.categories">
+                        <span class="badge text-bg-secondary">{{category.name}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="!isShowingUnarchivedNotes">
+            <div class="d-flex"  *ngFor="let archivedNote of archivedNotes">
+              <div class="card w-100 my-1">
+                <div class="card-body">
+                  <h5 class="card-title">{{archivedNote.title}}</h5>
+                  <div class="card-text">
+                    <div class="row justify-content-between">
+                      <div class="col-auto">{{archivedNote.content}}</div>
+                      <div class="col-auto">
+                        <i class='bx bx-sm bx-archive-out' (click)="unarchiveNote(archivedNote.id)" style="color:blue;"></i>
+                        <i class='bx bx-sm bx-edit' (click)="editNote(archivedNote)"></i>
+                        <i class='bx bx-sm bx-trash' (click)="deleteNote(archivedNote.id)" style="color:red;"></i>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-auto" *ngFor="let category of archivedNote.categories">
+                        <span class="badge text-bg-secondary">{{category.name}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div *ngIf="(isShowingUnarchivedNotes && unarchivedNotes.length <= 0) || (!isShowingUnarchivedNotes && archivedNotes.length <=0)">
+              <p>No se encontraron notas.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+
+</html>

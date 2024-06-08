@@ -1,0 +1,49 @@
+<div class="modal-dialog modal-dialog-centered p-3">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title">Create Note</h1>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="myForm" movalidate (ngSubmit)="createNote()">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-12 py-2">
+              <label for="note_title">Title<span class="required">*</span></label>
+              <input class="form-control" type="text" id="note_title" placeholder="Insert a title..." formControlName="note_title" />
+            </div>
+            <div class="col-12 py-2">
+              <label for="note_content">Content</label>
+              <input class="form-control" type="text" id="note_content" placeholder="Insert the content" formControlName="note_content" />
+            </div>
+            <div class="col-12 py-2">
+              <div class="form-group">
+                <label>Select categories:</label>
+                <div *ngFor="let category of categories">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [value]="category.id" (change)="onCheckboxChange($event)">
+                    <label class="form-check-label">{{ category.name }}</label>
+                  </div>
+                </div>
+              </div>
+              <!-- <label for="note_categories">Categories<span class="required">*</span></label>
+              <select class="form-control" id="note_categories" placeholder="Seleccionar" formControlName="note_categories" multiple>
+                <option [value]="undefined" disabled hidden>--Select an option--</option>
+                <option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </option>
+              </select> -->
+            </div>
+            <div class="col-12 d-flex justify-content-end pt-3">
+              <button type="button" class="btn btn-outline-secondary me-2" (click)="matDialogRef.close()">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-success" [disabled]="myForm.invalid || categoriesSelected.length <=0">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

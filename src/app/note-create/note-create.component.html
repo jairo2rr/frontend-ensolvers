@@ -1,10 +1,10 @@
 <div class="modal-dialog modal-dialog-centered p-3">
   <div class="modal-content">
     <div class="modal-header">
-      <h1 class="modal-title">Create Note</h1>
+      <h1 class="modal-title">{{optionDialog}} Note</h1>
     </div>
     <div class="modal-body">
-      <form [formGroup]="myForm" movalidate (ngSubmit)="createNote()">
+      <form [formGroup]="myForm" movalidate (ngSubmit)="modifyNote()">
         <div class="form-group">
           <div class="row">
             <div class="col-12 py-2">
@@ -20,7 +20,7 @@
                 <label>Select categories:</label>
                 <div *ngFor="let category of categories">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [value]="category.id" (change)="onCheckboxChange($event)">
+                    <input class="form-check-input" type="checkbox" [value]="category.id" (change)="onCheckboxChange($event)" [checked]="isCategorySelected(category.id!)">
                     <label class="form-check-label">{{ category.name }}</label>
                   </div>
                 </div>
@@ -37,8 +37,8 @@
               <button type="button" class="btn btn-outline-secondary me-2" (click)="matDialogRef.close()">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-success" [disabled]="myForm.invalid || categoriesSelected.length <=0">
-                Save
+              <button type="submit" class="btn btn-success" [disabled]="myForm.invalid">
+                {{optionDialog}}
               </button>
             </div>
           </div>

@@ -25,4 +25,4 @@ writeFileUsingFs(envDevelopmentPath, '');
 
 
 const isProduction = environment === 'prod';
-const environmentFileContent =
+// const environmentFileContent =

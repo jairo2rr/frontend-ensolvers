@@ -11,9 +11,9 @@ import { NoteCreateComponent } from '../note-create/note-create.component';
 export class NoteListComponent {
 
   unarchivedNotes: Note[] = [];
-  archivedNotes:Note[] = [];
+  archivedNotes: Note[] = [];
 
-  isShowingUnarchivedNotes:boolean = true;
+  isShowingUnarchivedNotes: boolean = true;
 
   constructor(
     private noteService: NoteService,
@@ -23,17 +23,17 @@ export class NoteListComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.loadUnarchivedNotes();
+    this.fetchNotes();
   }
 
-  showUnarchivedNotes():void{
+  showUnarchivedNotes(): void {
     this.isShowingUnarchivedNotes = true;
-    this.loadUnarchivedNotes();
+    this.fetchNotes();
   }
 
   showArchivedNotes(): void {
     this.isShowingUnarchivedNotes = false;
-    this.loadArchivedNotes();
+    this.fetchNotes();
   }
 
   createNote(data: any = null): void {
@@ -41,18 +41,28 @@ export class NoteListComponent {
     this._matDialog.open(NoteCreateComponent, {
       data: data
     }).afterClosed().subscribe({
-      next:(data)=>{
-        this.loadUnarchivedNotes();
+      next: (data) => {
+        this.fetchNotes();
       }
     });
   }
 
-  editNote(note: Note): void { }
-  deleteNote(id: number): void { }
+  editNote(note: Note): void {
+    this.createNote(note);
+  }
+  deleteNote(id: number): void {
+    this.noteService.deleteNoteById(id).subscribe({
+      next: (data) => {
+        console.log(`Note was deleted`);
+        this.fetchNotes();
+      },
+      error:(e)=>{console.error(`NoteListComponent::deleteNote ~ Error: `,e);}
+    });
+  }
   archiveNote(id: number): void {
     this.noteService.archiveNoteById(id).subscribe({
       next: (data) => {
-        this.loadUnarchivedNotes();
+        this.fetchNotes();
       },
       error: (e) => {
         console.error(`NoteListComponent::archiveNote ~ Error: `, e);
@@ -63,12 +73,20 @@ export class NoteListComponent {
   unarchiveNote(id: number): void {
     this.noteService.unarchiveNoteById(id).subscribe({
       next: (data) => {
-        this.loadArchivedNotes();
+        this.fetchNotes();
       },
       error: (e) => {
         console.error(`NoteListComponent::unarchiveNote ~ Error: `, e);
       }
     });
+  }
+
+  private fetchNotes():void{
+    if(this.isShowingUnarchivedNotes){
+      this.loadUnarchivedNotes();
+    }else{
+      this.loadArchivedNotes();
+    }
   }
 
   private loadUnarchivedNotes(): void {
@@ -78,21 +96,21 @@ export class NoteListComponent {
         next: (data) => {
           this.unarchivedNotes = data;
           console.info('Notes listed correctly.');
-          console.info(`Notes: `,this.unarchivedNotes);
         },
         error: (e) => {
-          console.error(`NoteListComponent::getUnarchivedNotes ~ Error:`, e);
+          console.error(`NoteListComponent::getUnarchivedNotes ~ Error:`, e)
         }
       });
+
   }
 
-  private loadArchivedNotes():void{
+  private loadArchivedNotes(): void {
     this.noteService.getArchivedNotes().subscribe({
-      next: (data)=>{
+      next: (data) => {
         this.archivedNotes = data;
       },
-      error: (e)=>{
-        console.error(`NoteListComponent::loadArchivedNotes ~ Error: `,e);
+      error: (e) => {
+        console.error(`NoteListComponent::loadArchivedNotes ~ Error: `, e);
       }
     });
   }

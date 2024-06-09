@@ -10,10 +10,11 @@ export interface Note {
   content: string;
   createdAt?:string;
   isArchived?:boolean;
-  categories?:Category[];
+  categories:Category[];
 }
 
 export interface NoteRequest {
+  id?:number;
   title: string;
   content: string;
   categoryIds:number[];
@@ -40,7 +41,7 @@ export class NoteService {
     return this.http.post<Note>(`${this.apiUrl}/note`,note);
   }
 
-  updateNote(note:Note):Observable<Note>{
+  updateNote(note:NoteRequest):Observable<Note>{
     return this.http.put<Note>(`${this.apiUrl}/note`,note);
   }
 
